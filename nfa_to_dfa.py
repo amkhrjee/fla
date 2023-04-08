@@ -2,6 +2,7 @@
 #   Author: Aniruddha Mukherjee         #
 #   Roll No. CSB21076                   #
 #########################################
+from beautifultable import BeautifulTable as btable
 
 nfa_transition_table = {
     'q0': {'0': ['q0'], '1': ['q0', 'q1']},
@@ -65,13 +66,24 @@ def nfa_to_dfa(transition_table, start_state, end_states):
         for each_state in dfa_transition_table:
             if each_end_state in each_state:
                 dfa_end_states.append(each_state)
-    return (dfa_transition_table, dfa_end_states)
+    return (dfa_transition_table, start_state, dfa_end_states)
 
 
-dfa_table, end_states = nfa_to_dfa(nfa_transition_table, 'q0', ['q2'])
+dfa_table, start_state, end_states = nfa_to_dfa(
+    nfa_transition_table, 'q0', ['q2'])
+table = btable()
+
 
 for state in dfa_table:
-    if state in end_states:
-        print("*" + state + " : " + str(dfa_table[state]))
+    if state is start_state:
+        table.rows.append(
+            ["->" + state, dfa_table[state]['0'], dfa_table[state]['1']])
+    elif state in end_states:
+        table.rows.append(
+            ["*" + state, dfa_table[state]['0'], dfa_table[state]['1']])
     else:
-        print(state + " : " + str(dfa_table[state]))
+        table.rows.append(
+            [state, dfa_table[state]['0'], dfa_table[state]['1']])
+
+table.columns.header = ["States", "0", "1"]
+print(table)
