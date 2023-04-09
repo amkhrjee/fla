@@ -8,14 +8,14 @@
 # DFA that accepts strings ending with 11
 #      | 0  | 1 |
 # -----|----|---|
-# q0   | q1 | q2|
-# q1   | q1 | q2|
+# q0   | q0 | q1|
+# q1   | q0 | q2|
 # *q2  | q0 | q2|
 
 
 dfa_transition_table = {
-    'q0': {'0': 'q1', '1': 'q2'},
-    'q1': {'0': 'q1', '1': 'q2'},
+    'q0': {'0': 'q0', '1': 'q1'},
+    'q1': {'0': 'q0', '1': 'q2'},
     'q2': {'0': 'q0', '1': 'q2'},
 }
 
@@ -37,7 +37,7 @@ def dfa_accepts(transition_table, start_state, end_states, input_string):
 
 
 # test
-if dfa_accepts(dfa_transition_table, 'q0', ['q2'], '00100011'):
-    print("String Accepted", )
+if dfa_accepts(dfa_transition_table, 'q0', ['q2'], '0010001'):
+    print("String Accepted")
 else:
     print("String Not Accepted")

@@ -69,6 +69,7 @@ def nfa_to_dfa(transition_table, start_state, end_states):
     return (dfa_transition_table, start_state, dfa_end_states)
 
 
+# test
 dfa_table, start_state, end_states = nfa_to_dfa(
     nfa_transition_table, 'q0', ['q2'])
 table = btable()
