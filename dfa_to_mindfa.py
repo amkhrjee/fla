@@ -75,19 +75,22 @@ def dfa_to_mindfa(transition_table, start_state, end_states):
     equivalent_list = get_equivalent_states(
         transition_table, [], equivalence_lists)
     print(equivalent_list)
+    new_state_str_list = []
     for group in equivalent_list:
-        if len(group) > 1:
-            new_state_str = "".join(sorted(group))
-            for state in group:
-                input_zero = set()
-                input_one = set()
-                input_zero.add(transition_table[state]['0'])
-                input_one.add(transition_table[state]['1'])
-                del transition_table[state]
-            transition_table[new_state_str] = {
-                '0': "".join(sorted(input_zero)),
-                '1': "".join(sorted(input_one))
-            }
+        new_state_str = "".join(sorted(group))
+        new_state_str_list.append(new_state_str)
+        for member in group:
+            input_zero = transition_table[member]['0']
+            input_one = transition_table[member]['1']
+            for each_str in new_state_str_list:
+                if transition_table[member]['0'] in each_str:
+                    input_zero = each_str
+                if transition_table[member]['1'] in each_str:
+                    input_one = each_str
+            del transition_table[member]
+        transition_table[new_state_str] = {
+            '0': "".join(sorted(input_zero)),
+            '1': "".join(sorted(input_one))}
     return (transition_table, start_state, end_states)
 
 
