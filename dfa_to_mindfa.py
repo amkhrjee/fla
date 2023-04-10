@@ -100,7 +100,7 @@ dfa_table, start_state, end_states = dfa_to_mindfa(
 table = btable()
 
 for state in dfa_table:
-    if state is start_state:
+    if start_state in state:
         table.rows.append(
             ["-> " + state, dfa_table[state]['0'], dfa_table[state]['1']])
     elif state in end_states:
