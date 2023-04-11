@@ -34,39 +34,33 @@ def is_equal(item_a, item_b):
 
 
 def get_equivalent_states(transition_table, prev_equivalence_list, equivalence_list):
-    if len(equivalence_list) > 0:
-        # print(equivalence_list)
-        if is_equal(prev_equivalence_list, equivalence_list):
-            return equivalence_list
-        else:
-            temp_list = []
-            new_list = []
-            temp_state_for_input_zero = ''
-            temp_state_for_input_one = ''
-            for group in equivalence_list:
-                # print("OG Group: " + str(group))
-                curr_group = group
-                if len(group) > 1:
-                    temp_state_for_input_zero = transition_table[group[0]]['0']
-                    temp_state_for_input_one = transition_table[group[0]]['1']
-                    for member in group:
-                        for input in transition_table[member]:
-                            if input == '0':
-                                if transition_table[member][input] != temp_state_for_input_zero:
-                                    curr_group.remove(member)
-                                    temp_list.append(member)
-                            elif input == '1':
-                                if transition_table[member][input] != temp_state_for_input_one:
-                                    curr_group.remove(member)
-                                    temp_list.append(member)
-                if len(curr_group) > 0:
-                    # print("CurrGroup: " + str(curr_group))
-                    new_list.append(curr_group)
-            if len(temp_list) > 0:
-                # print("temp_list: " + str(temp_list))
-                new_list.append(temp_list)
-            return get_equivalent_states(
-                transition_table, equivalence_list, sorted(new_list))
+    if is_equal(prev_equivalence_list, equivalence_list):
+        return equivalence_list
+    else:
+        temp_list = []
+        new_list = []
+        temp_state_for_input_zero = ''
+        temp_state_for_input_one = ''
+        for group in equivalence_list:
+            curr_group = group
+            temp_state_for_input_zero = transition_table[group[0]]['0']
+            temp_state_for_input_one = transition_table[group[0]]['1']
+            for member in group:
+                for input in transition_table[member]:
+                    if input == '0':
+                        if transition_table[member][input] != temp_state_for_input_zero:
+                            curr_group.remove(member)
+                            temp_list.append(member)
+                    elif input == '1':
+                        if transition_table[member][input] != temp_state_for_input_one:
+                            curr_group.remove(member)
+                            temp_list.append(member)
+            if len(curr_group) > 0:
+                new_list.append(curr_group)
+        if len(temp_list) > 0:
+            new_list.append(temp_list)
+        return get_equivalent_states(
+            transition_table, equivalence_list, sorted(new_list))
 
 
 def dfa_to_mindfa(transition_table, start_state, end_states):
@@ -74,7 +68,6 @@ def dfa_to_mindfa(transition_table, start_state, end_states):
         [x for x in transition_table if x not in end_states], [x for x in end_states]]
     equivalent_list = get_equivalent_states(
         transition_table, [], equivalence_lists)
-    print(equivalent_list)
     new_state_str_list = []
     for group in equivalent_list:
         new_state_str = "".join(sorted(group))
